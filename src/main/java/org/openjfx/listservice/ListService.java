@@ -2,11 +2,10 @@ package org.openjfx.listservice;
 
 import org.openjfx.enums.TaskStatus;
 import org.openjfx.exceptions.NotFoundException;
-import org.openjfx.exceptions.NotValidData;
+import org.openjfx.exceptions.InvalidDataTime;
 import org.openjfx.listrepository.ListRepository;
 import org.openjfx.model.Task;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,13 +17,13 @@ public class ListService {
     public ListService(ListRepository listRepository){
         this.listRepository = listRepository;
     }
-    public Task addTask(String title, String description, LocalDate dueDate) throws NotValidData {
+    public Task addTask(String title, String description, LocalDate dueDate) throws InvalidDataTime {
         if(!title.isEmpty() && dueDate.isAfter(LocalDate.now())){
             Task task = new Task(title, description, dueDate);
             listRepository.createTask(task);
             return task;
         }else{
-            throw new NotValidData("Не правильно переданы данные");
+            throw new InvalidDataTime("Дата должна быть позже текущей");
         }
     }
     public List<Task> listTasks(){
@@ -34,13 +33,17 @@ public class ListService {
         return listRepository.findById(id);
     }
     public Task editTask(UUID id, String newTitle, String newDescription, LocalDate newDueDate)
-            throws NotFoundException {
-        Task updatedTask = listRepository.findById(id);
-        updatedTask.setTitle(newTitle);
-        updatedTask.setDescription(newDescription);
-        updatedTask.setDueDate(newDueDate);
-        listRepository.update(id, updatedTask);
-        return updatedTask;
+            throws NotFoundException, InvalidDataTime {
+        if(!newTitle.isEmpty() && newDueDate.isAfter(LocalDate.now())) {
+            Task updatedTask = listRepository.findById(id);
+            updatedTask.setTitle(newTitle);
+            updatedTask.setDescription(newDescription);
+            updatedTask.setDueDate(newDueDate);
+            listRepository.update(id, updatedTask);
+            return updatedTask;
+        }else{
+            throw new InvalidDataTime("Дата должна быть позже текущей");
+        }
     }
     public Task updateStatus(UUID id, TaskStatus newStatus) throws NotFoundException {
         Task updatedTask = listRepository.findById(id);

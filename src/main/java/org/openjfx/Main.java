@@ -1,53 +1,51 @@
 package org.openjfx;
 
 import org.openjfx.exceptions.NotFoundException;
-import org.openjfx.exceptions.NotValidData;
+import org.openjfx.exceptions.InvalidDataTime;
 import org.openjfx.listcontroller.ListController;
 import org.openjfx.listrepository.ListRepository;
 import org.openjfx.listservice.ListService;
 
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) throws NotValidData, NotFoundException {
+    public static void main(String[] args) throws InvalidDataTime, NotFoundException {
         ListRepository listRepository = new ListRepository();
         ListService listService = new ListService(listRepository);
         ListController listController = new ListController(listService);
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         System.out.println("Добро пожаловать в приложение TODO Лист!\nДоступные команды:\n" +
-                "addTask\n" +
-                "showTasks\n" +
-                "editTask\n" +
-                "updateStatus\n" +
-                "deleteTask\n" +
-                "filterTasks\n" +
-                "sortTasks\n" +
+                "add\n" +
+                "show\n" +
+                "edit\n" +
+                "update\n" +
+                "delete\n" +
+                "filter\n" +
+                "sort\n" +
                 "exit");
 
         while(!exit){
             switch (scanner.nextLine()){
-                case "addTask":
+                case "add":
                     listController.addTask();
                     break;
-                case "showTasks":
+                case "show":
                     listController.showTasks();
                     break;
-                case "editTask":
+                case "edit":
                     listController.editTask();
                     break;
-                case "updateStatus":
+                case "update":
                     listController.updateStatus();
                     break;
-                case "deleteTask":
+                case "delete":
                     listController.deleteTask();
                     break;
-                case "filterTask":
+                case "filter":
                     listController.filterTasks();
                     break;
-                case "sortTasks":
+                case "sort":
                     listController.sortTasks();
                     break;
                 case "exit":
