@@ -11,15 +11,14 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class ListController {
-    private ListService listService;
+    private final ListService listService;
     public ListController(ListService listService){
         this.listService = listService;
     }
 
     private final Scanner scanner = new Scanner(System.in);
-    public void addTask() throws InvalidDataTime {
+    public void addTask(){
         try {
-            Task task = new Task();
             System.out.print("Введите название таски: ");
             String title = scanner.nextLine();
             System.out.print("Введите описание таски: ");
@@ -107,17 +106,12 @@ public class ListController {
                     "\n2 - IN_PROGRESS" +
                     "\n3 - DONE");
             String input = scanner.nextLine();
-            switch (input) {
-                case "1":
-                    input = "TODO";
-                    break;
-                case "2":
-                    input = "IN_PROGRESS";
-                    break;
-                case "3":
-                    input = "DONE";
-                    break;
-            }
+            input = switch (input) {
+                case "1" -> "TODO";
+                case "2" -> "IN_PROGRESS";
+                case "3" -> "DONE";
+                default -> input;
+            };
             TaskStatus taskStatus = TaskStatus.valueOf(input);
             System.out.println(listService.filterByStatus(taskStatus));
         }catch (NoSuchElementException | IllegalArgumentException e){

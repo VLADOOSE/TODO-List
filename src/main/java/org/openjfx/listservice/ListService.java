@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ListService {
-    private ListRepository listRepository;
+    private final ListRepository listRepository;
     public ListService(ListRepository listRepository){
         this.listRepository = listRepository;
     }
