@@ -1,43 +1,32 @@
 package org.openjfx.listrepository;
 
-import org.openjfx.exceptions.NotFoundException;
+
 import org.openjfx.model.Task;
 
 import java.util.*;
 
 public class ListRepository {
-    Map<UUID, Task> list = new HashMap<UUID, Task>();
-    public Task createTask(Task task){
+    private final Map<UUID, Task> list = new HashMap<>();
+
+    public Task createTask(Task task) {
         list.put(task.getId(), task);
-        return list.get(task.getId());
+        return task;
     }
-    public Task findById(UUID id) throws NotFoundException {
-        if(list.get(id) != null){
-            return list.get(id);
-        }else{
-            throw new NotFoundException("Таска не найдена");
-        }
+
+    public Optional<Task> findById(UUID id) {
+        return Optional.ofNullable(list.get(id));
     }
-    public Map<UUID, Task> findAll(){
+
+    public Map<UUID, Task> findAll() {
         return Map.copyOf(list);
     }
-    public Task update(UUID id, Task updatedTask) throws NotFoundException {
-        if(list.get(id) != null){
-            list.put(id, updatedTask);
-            return updatedTask;
-        }else{
-            throw new NotFoundException("Таска не найдена");
-        }
-    }
-    public boolean delete(UUID id) throws NotFoundException {
-        if(list.get(id) != null){
-            list.remove(id);
-            return true;
-        }else if(list.get(id) == null){
-            throw new NotFoundException("Таска не найдена");
-        }
-        return false;
+
+    public Task update(UUID id, Task updatedTask) {
+        list.put(id, updatedTask);
+        return updatedTask;
     }
 
-
+    public boolean delete(UUID id) {
+        return list.remove(id) != null;
+    }
 }
